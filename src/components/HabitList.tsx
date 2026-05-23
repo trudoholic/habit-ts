@@ -1,3 +1,4 @@
+import {eachDayOfInterval, startOfWeek, endOfWeek, format} from 'date-fns';
 import {Button} from "./Button";
 
 export function HabitList() {
@@ -23,7 +24,10 @@ type HabitItemProps = {
 }
 
 function HabitItem({habit}: HabitItemProps) {
-  const visibleDates = [new Date(), new Date(), new Date()]
+  const visibleDates = eachDayOfInterval({
+    start: startOfWeek(new Date(), {weekStartsOn: 1}),
+    end: endOfWeek(new Date(), {weekStartsOn: 1})
+  })
 
   return (
     <div className="rounded-xl bg-zinc-800 p-4 flex flex-col gap-3">
@@ -38,7 +42,8 @@ function HabitItem({habit}: HabitItemProps) {
       <div className="flex gap-1.5">
         {visibleDates.map(date => (
           <Button key={date.toISOString()}>
-            <span className="font-medium">{habit.id}</span>
+            <span className="font-medium">{format(date, "EEE")}</span>
+            <span className="font-medium">{format(date, "d")}</span>
           </Button>
         ))}
       </div>
