@@ -36,7 +36,7 @@ function HabitItem({habit}: HabitItemProps) {
           <span className="font-medium">{habit.name}</span>
           <span className="font-sm text-amber-400">{habit.id}</span>
         </div>
-        <Button>Del</Button>
+        <Button variant={"gost-destructive"}>Del</Button>
       </div>
 
       <div className="flex gap-1.5">
