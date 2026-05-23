@@ -1,0 +1,47 @@
+import {Button} from "./Button";
+
+export function HabitList() {
+  const habits = [{id: '1', name: "111"}, {id: '2', name: "222"}, {id: '3', name: "333"}]
+
+  if (!habits.length) {
+    return (
+      <p className="text-center text-zinc-500 py-12">No habits yet.</p>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {habits.map(habit => (
+        <HabitItem key={habit.id} habit={habit}/>
+      ))}
+    </div>
+  )
+}
+
+type HabitItemProps = {
+  habit: {id: string, name: string}
+}
+
+function HabitItem({habit}: HabitItemProps) {
+  const visibleDates = [new Date(), new Date(), new Date()]
+
+  return (
+    <div className="rounded-xl bg-zinc-800 p-4 flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <div className="flex gap-3">
+          <span className="font-medium">{habit.name}</span>
+          <span className="font-sm text-amber-400">{habit.id}</span>
+        </div>
+        <Button>Del</Button>
+      </div>
+
+      <div className="flex gap-1.5">
+        {visibleDates.map(date => (
+          <Button key={date.toISOString()}>
+            <span className="font-medium">{habit.id}</span>
+          </Button>
+        ))}
+      </div>
+    </div>
+  )
+}
