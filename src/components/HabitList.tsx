@@ -4,9 +4,10 @@ import {Button} from "./Button";
 export type Habit = {id: string, name: string}
 type HabitListProps = {
   habits: Habit[]
+  deleteHabit: (id: string) => void
 }
 
-export function HabitList({habits}: HabitListProps) {
+export function HabitList({habits, deleteHabit}: HabitListProps) {
   if (!habits.length) {
     return (
       <p className="text-center text-zinc-500 py-12">No habits yet.</p>
@@ -16,7 +17,7 @@ export function HabitList({habits}: HabitListProps) {
   return (
     <div className="flex flex-col gap-3">
       {habits.map(habit => (
-        <HabitItem key={habit.id} habit={habit}/>
+        <HabitItem key={habit.id} habit={habit} deleteHabit={deleteHabit} />
       ))}
     </div>
   )
@@ -24,9 +25,10 @@ export function HabitList({habits}: HabitListProps) {
 
 type HabitItemProps = {
   habit: Habit
+  deleteHabit: (id: string) => void
 }
 
-function HabitItem({habit}: HabitItemProps) {
+function HabitItem({habit, deleteHabit}: HabitItemProps) {
   const visibleDates = eachDayOfInterval({
     start: startOfWeek(new Date(), {weekStartsOn: 1}),
     end: endOfWeek(new Date(), {weekStartsOn: 1})
@@ -39,7 +41,11 @@ function HabitItem({habit}: HabitItemProps) {
           <span className="font-medium">{habit.name}</span>
           <span className="font-sm text-amber-400">{habit.id}</span>
         </div>
-        <Button variant={"gost-destructive"} className="text-xs">Delete</Button>
+        <Button
+          onClick={() => deleteHabit(habit.id)}
+          variant={"gost-destructive"}
+          className="text-xs"
+        >Delete</Button>
       </div>
 
       <div className="flex gap-1.5">
