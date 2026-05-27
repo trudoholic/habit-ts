@@ -1,15 +1,33 @@
-import {createContext, type ReactNode} from "react"
+import {type ReactNode, useState} from "react";
+import {type Habit, HabitContext} from "./useHabits";
+import {isSameDay} from "date-fns";
 
-type Context = {
-  name: string
-}
+export function HabitProvider({children}: { children: ReactNode }) {
+  const [habits, setHabits] = useState<Habit[]>([])
 
-export const HabitContext = createContext<null | Context>(null)
+  function addHabit(name: string) {
+    setHabits(curr => [...curr, {id: crypto.randomUUID(), name, completions: []}])
+  }
 
-type HabitProviderProps = {
-  children: ReactNode
-}
+  function deleteHabit(id: string) {
+    setHabits(curr => curr.filter(h => h.id !== id))
+  }
 
-export function HabitProvider({children}: HabitProviderProps) {
-  return <HabitContext value={{name: "Nemo"}}>{children}</HabitContext>
+  function toggleHabit(id: string, date: Date) {
+    setHabits(curr => curr.map(h => {
+      if (h.id !== id) return h
+      const alreadyDone = h.completions.some(c => isSameDay(c, date))
+      const completions = alreadyDone? h.completions.filter(c => !isSameDay(c, date)): [...h.completions, date]
+      return {...h, completions}
+    }))
+  }
+
+  return <HabitContext value={{
+    habits,
+    addHabit,
+    deleteHabit,
+    toggleHabit,
+  }}>
+    {children}
+  </HabitContext>
 }
