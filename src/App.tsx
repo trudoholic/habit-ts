@@ -24,7 +24,7 @@ function App() {
           onPrev={() => setWeekOffset(o => o - 1)}
         />
         <HabitForm />
-        <HabitList />
+        <HabitList visibleDates={visibleDates} />
       </HabitProvider>
     </div>
   )
